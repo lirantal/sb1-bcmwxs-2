@@ -14,9 +14,7 @@
           Not Vulnerable
         </button>
       </div>
-      <div class="mt-4 text-center" v-if="isDragging">
-        {{ dragDirection === 'left' ? 'Vulnerable' : dragDirection === 'right' ? 'Not Vulnerable' : '' }}
-      </div>
+
     </div>
   </div>
 </template>
