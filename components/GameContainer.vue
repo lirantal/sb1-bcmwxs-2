@@ -1,5 +1,10 @@
 <template>
-  <div class="w-full max-w-2xl bg-white shadow-lg rounded-lg overflow-hidden">
+  <div
+    class="w-full max-w-2xl bg-white shadow-lg rounded-lg overflow-hidden"
+    :style="{ transform: `translateX(${dragOffset}px)` }"
+      @mousedown="startDrag"
+      @touchstart="startDrag"
+    >
     <h1 class="text-3xl font-bold text-center py-4 bg-purple-900 text-white">Vulnerable or Not?</h1>
     <div class="p-6">
       <div class="mb-4 text-xl font-semibold">Score: {{ score }}</div>
@@ -7,7 +12,7 @@
         <CodeSnippet
           v-if="currentSnippet"
           :snippet="currentSnippet"
-          @swipe="handleSwipe"
+          @userCodeReviewSubmit="handleUserCodeReview"
         />
       </template>
       <GameOver
@@ -60,7 +65,50 @@ async function hashPassword(password) {
   ];
 });
 
-function handleSwipe(isVulnerable) {
+const dragOffset = ref(0);
+const isDragging = ref(false);
+const dragStartX = ref(0);
+
+const dragDirection = computed(() => {
+  if (dragOffset.value < -50) return 'left';
+  if (dragOffset.value > 50) return 'right';
+  return '';
+});
+
+function startDrag(event) {
+  isDragging.value = true;
+  dragStartX.value = event.type === 'mousedown' ? event.clientX : event.touches[0].clientX;
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('touchmove', drag);
+  document.addEventListener('mouseup', endDrag);
+  document.addEventListener('touchend', endDrag);
+}
+
+function drag(event) {
+  if (!isDragging.value) return;
+  const currentX = event.type === 'mousemove' ? event.clientX : event.touches[0].clientX;
+  dragOffset.value = currentX - dragStartX.value;
+}
+
+function endDrag() {
+  isDragging.value = false;
+  document.removeEventListener('mousemove', drag);
+  document.removeEventListener('touchmove', drag);
+  document.removeEventListener('mouseup', endDrag);
+  document.removeEventListener('touchend', endDrag);
+
+  console.log(dragOffset);
+  
+  if (dragOffset.value < -200) {
+    handleUserCodeReview(true);
+  } else if (dragOffset.value > 200) {
+    handleUserCodeReview(false);
+  }
+
+  dragOffset.value = 0;
+}
+
+function handleUserCodeReview(isVulnerable) {
   if (isVulnerable === currentSnippet.value.isVulnerable) {
     score.value++;
   }
@@ -78,3 +126,9 @@ function restartGame() {
   isGameOver.value = false;
 }
 </script>
+
+<style scoped>
+.bg-gray-800 {
+  transition: transform 0.3s ease-out;
+}
+</style>
