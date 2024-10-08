@@ -13,6 +13,7 @@
     "nuxt": "^3.13.0"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.11.4"
+    "@nuxtjs/tailwindcss": "^6.11.4",
+    "@tailwindcss/typography": "^0.5.15"
   }
 }

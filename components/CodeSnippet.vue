@@ -5,7 +5,7 @@
     <div
       class="bg-gray-800 p-4 rounded-lg text-white overflow-x-auto h-full mx-2"
     >
-      <pre><code>{{ snippet.code }}</code></pre>
+      <pre class="prose text-slate-50"><code>{{ snippet.code }}</code></pre>
       <div class="mt-4 flex justify-between">
         <button @click="$emit('userCodeReviewSubmit', true)" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
           Vulnerable

@@ -7,7 +7,21 @@ module.exports = {
     "./app.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+           // Add custom utilities here
+           typography: {
+            DEFAULT: {
+              css: {
+                'code': {
+                  'white-space': 'pre-wrap',
+                  'word-break': 'break-word',
+                },
+              },
+            },
+          },
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
